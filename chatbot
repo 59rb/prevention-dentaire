@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Chatbot Prévention Dentaire - Cabinet médical de Wattrelos & Tourcoing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: #f6f6f6;
+}
+.chatbox {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ccc;
+}
+button {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 12px;
+  border: none;
+  background: #1976d2;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover { background: #125a9c; }
+.hidden { display: none; }
+</style>
+</head>
+
+<body>
+<div class="chatbox">
+<h2>🦷 Prévention dentaire</h2>
+<p><strong>Cabinet médical de Wattrelos & Tourcoing</strong></p>
+
+<div id="step1">
+  <p>Souhaitez-vous répondre à quelques questions pour évaluer le risque carieux de votre enfant ?</p>
+  <button onclick="goStep2()">Oui</button>
+  <button onclick="noQuiz()">Non, juste des conseils</button>
+</div>
+
+<div id="quiz" class="hidden">
+  <h3>Questions</h3>
+
+  <p>1️⃣ L'enfant se brosse les dents 2 fois par jour ?</p>
+  <button onclick="score+=0; nextQ(1)">Oui</button>
+  <button onclick="score+=1; nextQ(1)">Non</button>
+
+  <div id="q2" class="hidden">
+    <p>2️⃣ L'enfant consomme des boissons sucrées tous les jours ?</p>
+    <button onclick="score+=1; nextQ(2)">Oui</button>
+    <button onclick="score+=0; nextQ(2)">Non</button>
+  </div>
+
+  <div id="q3" class="hidden">
+    <p>3️⃣ Y a-t-il déjà eu des caries dans le passé ?</p>
+    <button onclick="score+=1; finish()">Oui</button>
+    <button onclick="score+=0; finish()">Non</button>
+  </div>
+</div>
+
+<div id="result" class="hidden">
+  <h3>Résultat</h3>
+  <p id="resultText"></p>
+  <h3>Conseils personnalisés</h3>
+  <ul id="advices"></ul>
+</div>
+
+<div id="adviceOnly" class="hidden">
+  <h3>Conseils dentaires</h3>
+  <ul>
+    <li>Brossage 2×/jour avec dentifrice fluoré (1000–1500 ppm selon âge).</li>
+    <li>Éviter les boissons sucrées hors repas.</li>
+    <li>Visite dentaire 1 fois par an dès 3 ans.</li>
+    <li>Renforcer les habitudes alimentaires non sucrées.</li>
+  </ul>
+</div>
+
+<div id="dentistes" class="hidden">
+  <h3>Dentistes à proximité</h3>
+  <ul>
+    <li>Cabinet Dentaire — Wattrelos</li>
+    <li>Centre Dentaire — Tourcoing</li>
+    <li>Clinique Odontologie — Roubaix</li>
+  </ul>
+</div>
+
+</div>
+
+<script>
+let score = 0;
+
+function goStep2() {
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+}
+
+function nextQ(n) {
+  if (n === 1) document.getElementById("q2").classList.remove("hidden");
+  if (n === 2) document.getElementById("q3").classList.remove("hidden");
+}
+
+function finish() {
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+  document.getElementById("dentistes").classList.remove("hidden");
+
+  const text = document.getElementById("resultText");
+  const advices = document.getElementById("advices");
+
+  if (score === 0) {
+    text.textContent = "🟢 Risque carieux faible";
+    advices.innerHTML = "<li>Continuer le brossage 2×/jour</li><li>Visite annuelle recommandée</li>";
+  }
+  if (score === 1 || score === 2) {
+    text.textContent = "🟡 Risque carieux modéré";
+    advices.innerHTML = "<li>Brossage rigoureux + dentifrice fluoré</li><li>Limiter boissons sucrées</li><li>Contrôle dentaire conseillé</li>";
+  }
+  if (score >= 3) {
+    text.textContent = "🔴 Risque carieux élevé";
+    advices.innerHTML = "<li>Consultation dentaire rapide</li><li>Contrôle alimentation sucrée</li><li>Brossage strict quotidien</li>";
+  }
+}
+
+function noQuiz() {
+  document.getElementById("step1").classList.add("hidden");
+  document.getElementById("adviceOnly").classList.remove("hidden");
+  document.getElementById("dentistes").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
